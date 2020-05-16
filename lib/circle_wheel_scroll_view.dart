@@ -574,6 +574,7 @@ class CircleListScrollView extends StatefulWidget {
     @required List<Widget> children,
     this.axis = Axis.vertical,
     this.radius = 100,
+    this.flip = false
   }) : assert(children != null),
        assert(itemExtent != null),
        assert(itemExtent > 0),
@@ -599,6 +600,7 @@ class CircleListScrollView extends StatefulWidget {
     @required this.childDelegate,
     this.axis = Axis.vertical,
     this.radius = 100,
+    this.flip = false
   }) : assert(childDelegate != null),
        assert(itemExtent != null),
        assert(itemExtent > 0),
@@ -653,6 +655,9 @@ class CircleListScrollView extends StatefulWidget {
 
   /// Define a main axis of scrolling
   final Axis axis;
+
+  /// Flips the Circle list on its main axis
+  final bool flip;
 
   /// Circle radius
   final double radius;
@@ -713,6 +718,7 @@ class _CircleListScrollViewState extends State<CircleListScrollView> {
         viewportBuilder: (BuildContext context, ViewportOffset offset) {
           return CircleListViewport(
             axis: widget.axis,
+            flip: widget.flip,
             radius: widget.radius,
             itemExtent: widget.itemExtent,
             clipToSize: widget.clipToSize,
@@ -908,6 +914,7 @@ class CircleListViewport extends RenderObjectWidget {
     @required this.childDelegate,
     @required this.axis,
     this.radius = 100,
+    this.flip
   }) : assert(childDelegate != null),
        assert(offset != null),
        assert(itemExtent != null),
@@ -939,6 +946,9 @@ class CircleListViewport extends RenderObjectWidget {
 
   final Axis axis;
 
+  /// If true, makes it flip on the main axis.
+  final bool flip;
+
   final double radius;
 
   @override
@@ -949,6 +959,7 @@ class CircleListViewport extends RenderObjectWidget {
     final CircleListElement childManager = context;
     return RenderCircleListViewport(
       axis: axis,
+      flip: flip,
       radius: radius,
       childManager: childManager,
       offset: offset,
@@ -962,6 +973,7 @@ class CircleListViewport extends RenderObjectWidget {
   void updateRenderObject(BuildContext context, RenderCircleListViewport renderObject) {
     renderObject
       ..axis = axis
+      ..flip = flip
       ..radius = radius
       ..offset = offset
       ..itemExtent = itemExtent

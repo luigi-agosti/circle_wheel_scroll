@@ -139,6 +139,7 @@ class RenderCircleListViewport
     bool clipToSize = true,
     bool renderChildrenOutsideViewport = false,
     List<RenderBox> children,
+    this.flip = false
   }) : assert(childManager != null),
        assert(offset != null),
        assert(itemExtent != null),
@@ -166,6 +167,8 @@ class RenderCircleListViewport
 
   /// The delegate that manages the children of this object.
   final CircleListChildManager childManager;
+
+  bool flip;
 
   /// The associated ViewportOffset object for the viewport describing the part
   /// of the content inside that's visible.
@@ -642,7 +645,7 @@ class RenderCircleListViewport
 
     final mainCordinate = axis == Axis.horizontal ? untransformedPaintingCoordinates.dx : untransformedPaintingCoordinates.dy;
 
-    final fractional = ((_mainAxisSize/2) - (mainCordinate + _itemExtent / 2.0)) / (_mainAxisSize/2);
+    final fractional = ((_mainAxisSize/2) - (flip ? -1 : 1) * (mainCordinate + _itemExtent / 2.0)) / (_mainAxisSize/2);
 
     double angle;
 
@@ -670,7 +673,7 @@ class RenderCircleListViewport
       );
     } else {
       offsetToCenter = Offset(
-        untransformedPaintingCoordinates.dx,
+        untransformedPaintingCoordinates.dx + (flip ? (size.width  * 0.5) : 0),
         radius - _scrollMarginExtent,
       );
     }
